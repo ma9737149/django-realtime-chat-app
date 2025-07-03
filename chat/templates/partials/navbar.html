@@ -8,13 +8,13 @@
                 {% if request.user.is_authenticated %}
                     <label tabindex="0" class="btn btn-ghost btn-circle avatar">
                         <div class="w-10 rounded-full">
-                            <img src="https://img.daisyui.com/images/stock/photo-1534528741775-53994a69daeb.webp" alt="Profile" />
+                            <img src="{{ request.user.profile.url }}" alt="Profile" />
                         </div>
                     </label>
                     <ul tabindex="0" class="dropdown-content menu menu-sm dropdown-content bg-base-100 rounded-box z-10 mt-3 w-52 p-2 shadow">
                         <li><a>Profile</a></li>
                         <li><a>Settings</a></li>
-                        <li><a>Logout</a></li>
+                        <li><a href="{% url 'logout' %}">Logout</a></li>
                     </ul>
                 {% else %}
                     <div class="dropdown dropdown-end">
@@ -22,8 +22,8 @@
                             Authentication
                         </label>
                         <ul tabindex="0" class="dropdown-content menu p-2 shadow bg-base-100 rounded-box w-52">
-                            <li><a>Login</a></li>
-                            <li><a>Sign up</a></li>
+                            <li><a href="{% url 'login' %}">Login</a></li>
+                            <li><a href="{% url 'sign-up' %}">Sign up</a></li>
                         </ul>
                     </div>
                 {% endif %}
@@ -32,12 +32,12 @@
             {% if request.user.is_authenticated %}
                 <div class="dropdown dropdown-end">
                     <label tabindex="0" class="btn btn-ghost">
-                        Products
+                        Rooms
                     </label>
                     <ul tabindex="0" class="dropdown-content menu p-2 shadow bg-base-100 rounded-box w-52">
-                        <li><a>Add product</a></li>
-                        <li><a>Update product</a></li>
-                        <li><a>Remove product</a></li>
+                        <li><a>Add Room</a></li>
+                        <li><a>Update Room</a></li>
+                        <li><a>Remove Room</a></li>
                     </ul>
                 </div>
             {% endif %}
