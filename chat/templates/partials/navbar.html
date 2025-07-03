@@ -1,0 +1,47 @@
+<div class="navbar bg-base-100 shadow-sm">
+    <div class="container mx-auto flex justify-between items-center px-4">
+        <a class="btn btn-ghost text-xl normal-case">Chat app</a>
+
+        <div class="flex items-center gap-6">
+
+            <div class="dropdown dropdown-end">
+                {% if request.user.is_authenticated %}
+                    <label tabindex="0" class="btn btn-ghost btn-circle avatar">
+                        <div class="w-10 rounded-full">
+                            <img src="https://img.daisyui.com/images/stock/photo-1534528741775-53994a69daeb.webp" alt="Profile" />
+                        </div>
+                    </label>
+                    <ul tabindex="0" class="dropdown-content menu menu-sm dropdown-content bg-base-100 rounded-box z-10 mt-3 w-52 p-2 shadow">
+                        <li><a>Profile</a></li>
+                        <li><a>Settings</a></li>
+                        <li><a>Logout</a></li>
+                    </ul>
+                {% else %}
+                    <div class="dropdown dropdown-end">
+                        <label tabindex="0" class="btn btn-ghost">
+                            Authentication
+                        </label>
+                        <ul tabindex="0" class="dropdown-content menu p-2 shadow bg-base-100 rounded-box w-52">
+                            <li><a>Login</a></li>
+                            <li><a>Sign up</a></li>
+                        </ul>
+                    </div>
+                {% endif %}
+            </div>
+
+            {% if request.user.is_authenticated %}
+                <div class="dropdown dropdown-end">
+                    <label tabindex="0" class="btn btn-ghost">
+                        Products
+                    </label>
+                    <ul tabindex="0" class="dropdown-content menu p-2 shadow bg-base-100 rounded-box w-52">
+                        <li><a>Add product</a></li>
+                        <li><a>Update product</a></li>
+                        <li><a>Remove product</a></li>
+                    </ul>
+                </div>
+            {% endif %}
+            
+        </div>
+    </div>
+</div>
