@@ -38,8 +38,10 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
+
     'widget_tweaks',
-    'chat'
+    'chat.apps.ChatConfig',
+    'django_cleanup.apps.CleanupConfig'
 ]
 
 MIDDLEWARE = [
@@ -134,3 +136,4 @@ LOGIN_URL = '/login/'
 MEDIA_URL = '/media/'
 MEDIA_ROOT = os.path.join(BASE_DIR , 'chat_project/media')
 AUTH_USER_MODEL = 'chat.UserProfile'
+DJANGO_CLEANUP_KEEP_UNUSED_FILES = True

@@ -23,7 +23,7 @@
 
             <div class="form-control">
                 <label class="label">
-                <span class="label-text">Username</span>
+                <span class="label-text mb-2">Username</span>
                 </label>
                 {{ form.username|add_class:"input input-bordered w-full focus:outline-none focus:ring-2 focus:ring-primary" | attr:"placeholder:Enter your username" }}
                 {% if form.username.errors %}
@@ -33,7 +33,7 @@
 
             <div class="form-control">
                 <label class="label">
-                <span class="label-text">Password</span>
+                <span class="label-text mb-2">Password</span>
                 </label>
                 {{ form.password|add_class:"input input-bordered w-full focus:outline-none focus:ring-2 focus:ring-primary" | attr:"placeholder:Enter your password" }}
                 {% if form.password.errors %}
