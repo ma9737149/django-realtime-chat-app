@@ -20,8 +20,8 @@
         tailwind.config = {
             plugins: [daisyui],
             daisyui: {
-            themes: ["light", "dark"],
-            darkTheme: "dark",
+                themes: ["light", "dark"],
+                darkTheme: "dark",
             },
         };
     </script>
@@ -33,11 +33,9 @@
     {% include './partials/alert.html' %}
 
 
-    <div class="min-h-screen flex items-center justify-center bg-base-200 p-4">
-        {% block content %}
+    {% block content %}
 
-        {% endblock %}
-    </div>
+    {% endblock %}
 
 
 

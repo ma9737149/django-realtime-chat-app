@@ -7,43 +7,51 @@
 {% load widget_tweaks %}
 
 {% block content %}
-
+    <div class="min-h-screen flex items-center justify-center bg-base-200 p-4">
         <div class="card w-full max-w-md shadow-xl bg-base-100 p-6">
             <h2 class="text-2xl font-bold mb-6 text-center">Login</h2>
 
-
             <form method="POST" class="space-y-5">
-            {% csrf_token %}
+                {% csrf_token %}
 
-            {% if form.non_field_errors %}
-                <div class="alert alert-error">
-                <span>{{ form.non_field_errors.0 }}</span>
+                {% if form.non_field_errors %}
+                    <div class="alert alert-error">
+                        <span>{{ form.non_field_errors.0 }}</span>
+                    </div>
+                {% endif %}
+
+                <div class="form-control">
+                    <label class="label">
+                        <span class="label-text mb-2">Username</span>
+                    </label>
+                    {{ form.username|add_class:"input input-bordered w-full focus:outline-none focus:ring-2 focus:ring-primary" | attr:"placeholder:Enter your username" }}
+                    {% if form.username.errors %}
+                        <p class="text-error text-sm mt-1">{{ form.username.errors.0 }}</p>
+                    {% endif %}
                 </div>
-            {% endif %}
 
-            <div class="form-control">
-                <label class="label">
-                <span class="label-text mb-2">Username</span>
-                </label>
-                {{ form.username|add_class:"input input-bordered w-full focus:outline-none focus:ring-2 focus:ring-primary" | attr:"placeholder:Enter your username" }}
-                {% if form.username.errors %}
-                <p class="text-error text-sm mt-1">{{ form.username.errors.0 }}</p>
-                {% endif %}
-            </div>
+                <div class="form-control">
+                    <label class="label">
+                        <span class="label-text mb-2">Password</span>
+                    </label>
+                    {{ form.password|add_class:"input input-bordered w-full focus:outline-none focus:ring-2 focus:ring-primary" | attr:"placeholder:Enter your password" }}
+                    {% if form.password.errors %}
+                        <p class="text-error text-sm mt-1">{{ form.password.errors.0 }}</p>
+                    {% endif %}
+                </div>
 
-            <div class="form-control">
-                <label class="label">
-                <span class="label-text mb-2">Password</span>
-                </label>
-                {{ form.password|add_class:"input input-bordered w-full focus:outline-none focus:ring-2 focus:ring-primary" | attr:"placeholder:Enter your password" }}
-                {% if form.password.errors %}
-                <p class="text-error text-sm mt-1">{{ form.password.errors.0 }}</p>
-                {% endif %}
-            </div>
-
-            <button type="submit" class="btn btn-primary w-full">Login</button>
+                <button type="submit" class="btn btn-primary w-full">Login</button>
             </form>
+
+            <div class="mt-6 text-sm text-center space-y-2">
+                <p>
+                    <a href="{% url 'reset_password' %}" class="link link-primary">Forgot your password?</a>
+                </p>
+                <p>
+                    Don’t have an account?
+                    <a href="{% url 'sign-up' %}" class="link link-primary font-medium">Sign up here</a>
+                </p>
+            </div>
         </div>
-
-
+    </div>
 {% endblock %}
