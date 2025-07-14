@@ -13,3 +13,4 @@ def uuid_upload_to(instance, filename):
 class UserProfile(AbstractUser):
     email = models.EmailField(unique=True , blank=False , null=False)
     profile = models.ImageField(upload_to=uuid_upload_to , default = 'defaults/default-img.png')
+    is_online = models.BooleanField(default=False)

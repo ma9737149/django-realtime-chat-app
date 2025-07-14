@@ -2,7 +2,7 @@ from django.shortcuts import render , redirect
 from .forms import CustomUserCreationForm
 from django.contrib.auth import login 
 from django.contrib.auth.views import (
-    LoginView,PasswordResetView,PasswordResetDoneView,
+    LoginView,LogoutView,PasswordResetView,PasswordResetDoneView,
     PasswordResetConfirmView,PasswordResetCompleteView
 )
 from django.contrib.auth.decorators import login_required
@@ -16,7 +16,15 @@ class RedirectAuthenticatedUserMixin:
 
 
 class CustomLoginView(RedirectAuthenticatedUserMixin, LoginView):
-    pass
+    def form_valid(self, form):
+        response = super().form_valid(form)
+        
+        user = self.request.user
+        user.is_online = True
+        user.save()
+
+
+        return response
 
 class CustomPasswordResetView(RedirectAuthenticatedUserMixin, PasswordResetView):
     pass
@@ -30,7 +38,15 @@ class CustomPasswordResetConfirmView(RedirectAuthenticatedUserMixin, PasswordRes
 class CustomPasswordResetCompleteView(RedirectAuthenticatedUserMixin, PasswordResetCompleteView):
     pass
 
+class CustomLogoutView(LogoutView):
+    def dispatch(self, request, *args, **kwargs):
+        user = request.user
 
+        if user.is_authenticated:
+            user.is_online = False
+            user.save()
+
+        return super().dispatch(request, *args, **kwargs)
 
 
 
@@ -41,13 +57,15 @@ def sign_up(request):
     form = CustomUserCreationForm(request.POST or None)
 
     if request.method == "POST" and form.is_valid():
-        user = form.save()
+        user = form.save(commit=False)
+        user.is_online = True
+        user.save()
         login(request, user)
         return redirect('index')
 
     return render(request, 'registration/sign_up.html', {'form': form})
 
 
-@login_required()
+@login_required
 def index(request):
     return render(request , 'index.html')

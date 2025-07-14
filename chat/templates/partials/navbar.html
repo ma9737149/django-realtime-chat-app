@@ -6,7 +6,7 @@
 
             <div class="dropdown dropdown-end">
                 {% if request.user.is_authenticated %}
-                    <label tabindex="0" class="btn btn-ghost btn-circle avatar">
+                    <label tabindex="0" class="btn btn-ghost btn-circle avatar {% if request.user.is_online == True %}avatar-online{% else %}avatar-offline{% endif %}">
                         <div class="w-10 rounded-full">
                         <img src="{{ request.user.profile.url }}" alt="Profile" />
                         </div>
