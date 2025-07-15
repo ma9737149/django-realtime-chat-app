@@ -1,10 +1,15 @@
 from django.shortcuts import render , redirect
-from .forms import CustomUserCreationForm
-from django.contrib.auth import login 
+from django.urls import reverse_lazy
+from .forms import CustomUserCreationForm 
+from django.contrib.auth import login , logout
+from .models import UserProfile , Room 
+from django.views.generic import DetailView , DeleteView , UpdateView
 from django.contrib.auth.views import (
     LoginView,LogoutView,PasswordResetView,PasswordResetDoneView,
     PasswordResetConfirmView,PasswordResetCompleteView
 )
+
+from django.contrib.auth.mixins import LoginRequiredMixin
 from django.contrib.auth.decorators import login_required
 
 class RedirectAuthenticatedUserMixin:
@@ -64,6 +69,48 @@ def sign_up(request):
         return redirect('index')
 
     return render(request, 'registration/sign_up.html', {'form': form})
+
+
+class UserProfileDetailView(LoginRequiredMixin , DetailView):
+    model = UserProfile
+    template_name = "registration/user_profile.html"
+    pk_url_kwarg = "user_id"
+
+class UserDeleteView(LoginRequiredMixin , DeleteView):
+    model = UserProfile
+    template_name = 'registration/user_delete_confirm.html'
+    success_url = reverse_lazy('index')
+
+    def get_object(self, queryset=None) :
+        return self.request.user
+
+
+    def delete(self, request, *args, **kwargs):
+        logout(request)
+        return super().delete(request, *args, **kwargs)
+
+class UserUpdateView(LoginRequiredMixin, UpdateView):
+    model = UserProfile
+    fields = ['username', 'email', 'profile']  
+    template_name = 'registration/user_update.html'
+
+    def get_object(self, queryset=None):
+        return self.request.user
+
+    def get_success_url(self)  :
+        return reverse_lazy('profile-detail' ,  kwargs =  { "user_id" : self.request.user.id })
+
+
+
+class RoomDetailView(LoginRequiredMixin , DetailView):
+    model = Room
+    template_name = "rooms/room.html"
+    pk_url_kwarg = "room_id"
+
+
+
+
+
 
 
 @login_required

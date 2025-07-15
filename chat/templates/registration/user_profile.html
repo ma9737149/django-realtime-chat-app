@@ -1,0 +1,37 @@
+{% extends "base.html" %}
+{% load static %}
+
+{% block content %}
+    <div class="min-h-screen bg-base-200 py-6 px-4">
+        <div class="max-w-4xl mx-auto bg-base-100 rounded-xl shadow-lg">
+            <div class="flex flex-col sm:flex-row items-center sm:justify-between gap-4 border-b p-6">
+                <div class="avatar">
+                    <div class="w-24 rounded-full ring ring-primary ring-offset-base-100 ring-offset-2">
+                    <img src="{{ object.profile.url }}" alt="{{ object.username }}">
+                    </div>
+                </div>
+                <h2 class="text-2xl font-bold">{{ object.username }}</h2>
+                </div>
+
+                <div role="tablist" class="tabs tabs-bordered px-6 pt-4">
+                <a role="tab" class="tab tab-active" aria-selected="true">Rooms</a>
+            </div>
+
+            <div class="p-6 space-y-4">
+                {% for room in object.rooms.all %}
+                    {% if room.room_author == object %}
+                        <div class="card bg-base-100 shadow">
+                        <div class="card-body">
+                            <h3 class="card-title">{{ room.room_name }}</h3>
+                            <p>{{ room.room_description|truncatechars:150|default:"No description." }}</p>
+                            <a href="{% url 'room-detail' room.id %}" class="btn btn-sm btn-primary w-max mt-2">View Room</a>
+                        </div>
+                        </div>
+                    {% endif %}
+                {% empty %}
+                    <p class="text-gray-500">This user hasn't created any rooms yet.</p>
+                {% endfor %}
+            </div>
+        </div>
+    </div>
+{% endblock %}
