@@ -1,8 +1,8 @@
 from django.shortcuts import render , redirect
 from django.urls import reverse_lazy
-from .forms import CustomUserCreationForm 
+from ..forms import CustomUserCreationForm 
 from django.contrib.auth import login , logout
-from .models import UserProfile , Room 
+from ..models import UserProfile 
 from django.views.generic import DetailView , DeleteView , UpdateView
 from django.contrib.auth.views import (
     LoginView,LogoutView,PasswordResetView,PasswordResetDoneView,
@@ -10,7 +10,6 @@ from django.contrib.auth.views import (
 )
 
 from django.contrib.auth.mixins import LoginRequiredMixin
-from django.contrib.auth.decorators import login_required
 
 class RedirectAuthenticatedUserMixin:
     def dispatch(self, request, *args, **kwargs):
@@ -99,20 +98,3 @@ class UserUpdateView(LoginRequiredMixin, UpdateView):
 
     def get_success_url(self)  :
         return reverse_lazy('profile-detail' ,  kwargs =  { "user_id" : self.request.user.id })
-
-
-
-class RoomDetailView(LoginRequiredMixin , DetailView):
-    model = Room
-    template_name = "rooms/room.html"
-    pk_url_kwarg = "room_id"
-
-
-
-
-
-
-
-@login_required
-def index(request):
-    return render(request , 'index.html')
