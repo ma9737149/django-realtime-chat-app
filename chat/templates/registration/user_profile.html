@@ -5,7 +5,7 @@
     <div class="min-h-screen bg-base-200 py-6 px-4">
         <div class="max-w-4xl mx-auto bg-base-100 rounded-xl shadow-lg">
             <div class="flex flex-col sm:flex-row items-center sm:justify-between gap-4 border-b p-6">
-                <div class="avatar">
+                <div class="avatar {% if object.is_online %} avatar-online {% endif %}">
                     <div class="w-24 rounded-full ring ring-primary ring-offset-base-100 ring-offset-2">
                     <img src="{{ object.profile.url }}" alt="{{ object.username }}">
                     </div>
