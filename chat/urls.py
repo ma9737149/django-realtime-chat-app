@@ -18,6 +18,6 @@ urlpatterns = [
     path('user/update' , users.UserUpdateView.as_view() , name="user-update"),
 
 
-    path('' , rooms.index , name="index"),
+    path('' , rooms.RoomView.as_view() , name="index"),
     path('room/<int:room_id>' , rooms.RoomDetailView.as_view() , name="room-detail")
 ]

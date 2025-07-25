@@ -4,10 +4,31 @@
 {% block title %}
     {{ app_name }} | Home
 {% endblock %}
-{% load widget_tweaks %}
-
 
 {% block content %}
-
-
+    <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6 p-4">
+        {% for room in object_list %}
+            <div class="card bg-base-100 shadow-md border border-base-200">
+                <div class="card-body">
+                    <h2 class="card-title text-primary">{{ room.room_name }}</h2>
+                    <p class="text-sm text-base-content/80">{{ room.room_description|truncatewords:20 }}</p>
+                    <div class="mt-2 flex flex-col gap-1">
+                        <span class="text-sm text-base-content/60">
+                            <span class="font-semibold">Author:</span> {{ room.room_author.username }}
+                        </span>
+                        <span class="text-sm text-base-content/60">
+                            <span class="font-semibold">Created:</span> {{ room.created_at|date:"Y-m-d H:i" }}
+                        </span>
+                    </div>
+                    <div class="card-actions justify-end mt-4">
+                        <a href="{% url 'room-detail' room.id %}" class="btn btn-sm btn-primary">Show More</a>
+                    </div>
+                </div>
+            </div>
+        {% empty %}
+            <div class="col-span-full text-center text-gray-500 text-lg">
+                No rooms available.
+            </div>
+        {% endfor %}
+    </div>
 {% endblock %}

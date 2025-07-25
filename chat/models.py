@@ -26,6 +26,9 @@ class UserProfile(AbstractUser):
             if self.profile.size > max_size:
                 raise ValidationError("Image file too large ( > 2MB )")
 
+    def __str__(self) -> str:
+        return self.email
+
 class Room(models.Model):
     room_name = models.CharField(max_length=100)
     room_description = models.CharField(max_length=300)
@@ -35,6 +38,9 @@ class Room(models.Model):
     class Meta:
         unique_together = ['room_name' , 'room_author']
 
+    def __str__(self) -> str:
+        return self.room_name
+
 
 class Message(models.Model):
     message_content = models.CharField(max_length=4000)
@@ -43,3 +49,5 @@ class Message(models.Model):
     room = models.ForeignKey(Room, on_delete=models.CASCADE, related_name="messages")
 
 
+    def __str__(self) -> str:
+        return self.message_content
