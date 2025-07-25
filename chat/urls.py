@@ -1,7 +1,6 @@
 from django.urls import path
-from views import users , rooms
 from django.contrib.auth import views as users_views  
-
+from .views import rooms , users
 
 
 urlpatterns = [
