@@ -1,9 +1,9 @@
-from django.shortcuts import render , redirect
+from django.shortcuts import redirect
 from django.urls import reverse_lazy
 from ..forms import CustomUserCreationForm 
-from django.contrib.auth import login , logout
+from django.contrib.auth import login , logout , update_session_auth_hash
 from ..models import UserProfile 
-from django.views.generic import DetailView , DeleteView , UpdateView
+from django.views.generic import DetailView , DeleteView , UpdateView , CreateView
 from django.contrib.auth.views import (
     LoginView,LogoutView,PasswordResetView,PasswordResetDoneView,
     PasswordResetConfirmView,PasswordResetCompleteView
@@ -54,21 +54,22 @@ class CustomLogoutView(LogoutView):
 
 
 
-def sign_up(request):
-    if request.user.is_authenticated:
-        return redirect('index')
+class SignUpView(CreateView):
+    template_name = 'registration/sign_up.html'
+    form_class = CustomUserCreationForm
+    success_url = reverse_lazy('index')
 
-    form = CustomUserCreationForm(request.POST or None)
+    def dispatch(self, request, *args, **kwargs):
+        if request.user.is_authenticated:
+            return redirect('index')
+        return super().dispatch(request, *args, **kwargs)
 
-    if request.method == "POST" and form.is_valid():
+    def form_valid(self, form):
         user = form.save(commit=False)
         user.is_online = True
         user.save()
-        login(request, user)
-        return redirect('index')
-
-    return render(request, 'registration/sign_up.html', {'form': form})
-
+        login(self.request, user)
+        return super().form_valid(form)
 
 class UserProfileDetailView(LoginRequiredMixin , DetailView):
     model = UserProfile
@@ -90,11 +91,16 @@ class UserDeleteView(LoginRequiredMixin , DeleteView):
 
 class UserUpdateView(LoginRequiredMixin, UpdateView):
     model = UserProfile
-    fields = ['username', 'email', 'profile']  
+    fields = ['username', 'email', 'profile']
     template_name = 'registration/user_update.html'
 
     def get_object(self, queryset=None):
         return self.request.user
 
-    def get_success_url(self)  :
-        return reverse_lazy('profile-detail' ,  kwargs =  { "user_id" : self.request.user.id })
+    def form_valid(self, form):
+        response = super().form_valid(form)
+        update_session_auth_hash(self.request, self.object)  
+        return response
+
+    def get_success_url(self):
+        return reverse_lazy('profile-detail', kwargs={"user_id": self.request.user.id})

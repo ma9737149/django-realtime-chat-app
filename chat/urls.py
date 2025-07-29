@@ -6,7 +6,7 @@ from .views import rooms , users
 urlpatterns = [
     path('login/' , users.CustomLoginView.as_view() , name="login" ),
     path('logout/' , users.CustomLogoutView.as_view() , name="logout" ),
-    path('sign-up/' , users.sign_up , name="sign-up" ),
+    path('sign-up/' , users.SignUpView.as_view() , name="sign-up" ),
     path('reset_password/', users.CustomPasswordResetView.as_view(), name='reset_password'),
     path('reset_password_sent/', users.CustomPasswordResetView.as_view(), name='password_reset_done'),
     path('reset/<uidb64>/<token>/', users.CustomPasswordResetDoneView.as_view(), name='password_reset_confirm'),
