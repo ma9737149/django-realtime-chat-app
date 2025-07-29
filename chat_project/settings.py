@@ -44,8 +44,20 @@ INSTALLED_APPS = [
 
     'widget_tweaks',
     'chat.apps.ChatConfig',
-    'django_cleanup.apps.CleanupConfig'
+    'django_cleanup.apps.CleanupConfig',
+
+    'channels'
 ]
+
+ASGI_APPLICATION = 'chat_project.asgi.application'
+
+CHANNEL_LAYERS = {
+    "default": {
+        "BACKEND": "channels.layers.InMemoryChannelLayer"
+    },
+}
+
+
 
 MIDDLEWARE = [
     'django.middleware.security.SecurityMiddleware',

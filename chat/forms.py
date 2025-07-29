@@ -1,8 +1,7 @@
 from enum import unique
 from django import forms
 from django.contrib.auth.forms import UserCreationForm , UserChangeForm
-from .models import UserProfile
-
+from .models import UserProfile 
 class CustomUserCreationForm(UserCreationForm):
     email = forms.EmailField(required=True)
 
