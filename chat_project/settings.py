@@ -151,7 +151,7 @@ LOGIN_URL = '/login/'
 MEDIA_URL = '/media/'
 MEDIA_ROOT = os.path.join(BASE_DIR , 'chat_project/media')
 AUTH_USER_MODEL = 'chat.UserProfile'
-DJANGO_CLEANUP_KEEP_UNUSED_FILES = True
+DJANGO_CLEANUP_KEEP_UNUSED_FILES = False 
 
 
 EMAIL_BACKEND = os.getenv("EMAIL_BACKEND")
