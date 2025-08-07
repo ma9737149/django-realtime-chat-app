@@ -18,3 +18,18 @@ class RoomConsumer(AsyncWebsocketConsumer):
             "type": "room.created",
             "room": room,
         }))
+
+
+    async def room_updated(self, event):
+        room = event["room"]
+        await self.send(text_data=json.dumps({
+            "type": "room.updated",
+            "room": room,
+        }))
+
+    async def room_deleted(self, event):
+        room = event["room"]
+        await self.send(text_data=json.dumps({
+            "type": "room.deleted",
+            "room": room,
+        }))

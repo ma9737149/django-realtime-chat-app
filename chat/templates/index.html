@@ -11,7 +11,7 @@
             <div id="room-{{ room.id }}" class="card bg-base-100 shadow-md border border-base-200">
                 <div class="card-body">
                     <h2 class="card-title text-primary">{{ room.room_name }}</h2>
-                    <p class="text-sm text-base-content/80">{{ room.room_description|truncatewords:20 }}</p>
+                    <p class="description text-sm text-base-content/80 truncate">{{ room.room_description|truncatewords:20 }}</p>
                     <div class="mt-2 flex flex-col gap-1">
                         <span class="text-sm text-base-content/60">
                             <span class="font-semibold">Author:</span> {{ room.room_author.username }}
@@ -21,7 +21,15 @@
                         </span>
                     </div>
                     <div class="card-actions justify-end mt-4">
-                        <a href="{% url 'room-detail' room.id %}" class="btn btn-sm btn-primary">Show More</a>
+                        {% if request.user.is_authenticated and room.room_author == request.user %}
+                            <a href="{% url 'remove_room' room.id %}" class="btn btn-sm btn-soft btn-error">Remove</a>
+                            <a href="{% url 'edit_room' room.id %}" class="btn btn-sm btn-soft btn-accent">Edit</a>
+                        {% endif %}
+
+                        {% if request.user.is_authenticated %}
+                            <a href="{% url 'room-detail' room.id %}" class="btn btn-sm btn-primary btn-soft">Show More</a>
+                        {% endif %}
+                        
                     </div>
                 </div>
             </div>
@@ -41,6 +49,8 @@
         socket.onmessage = function (e) {
             const data = JSON.parse(e.data);
 
+
+
             if (data.type === "room.created") {
                 const room = data.room;
 
@@ -52,7 +62,7 @@
                     div.innerHTML = `
                         <div class="card-body">
                             <h2 class="card-title text-primary">${room.room_name}</h2>
-                            <p class="text-sm text-base-content/80">${room.room_description}</p>
+                            <p class="description text-sm text-base-content/80 truncate">${room.room_description}</p>
                             <div class="mt-2 flex flex-col gap-1">
                                 <span class="text-sm text-base-content/60">
                                     <span class="font-semibold">Author:</span> ${room.room_author}
@@ -62,12 +72,33 @@
                                 </span>
                             </div>
                             <div class="card-actions justify-end mt-4">
-                                <a href="/rooms/${room.id}/" class="btn btn-sm btn-primary">Show More</a>
+                                <a href="/edit-room/${room.id}" class="btn btn-sm btn-soft btn-accent">Edit</a>
+                                <a href="/rooms/${room.id}/" class="btn btn-sm btn-primary btn-soft">Show More</a>
                             </div>
                         </div>
                     `;
 
                     roomsList.prepend(div); 
+                }
+            }
+            else if (data.type === "room.updated"){
+
+                const room = data.room;
+                const room_name_div = document.querySelector(`#room-${room.id} .card-body .card-title`)
+                const room_description_div = document.querySelector(`#room-${room.id} .card-body .description`)
+
+
+                room_name_div.innerHTML = room.room_name
+                room_description_div.innerHTML = room.room_description
+            }
+            else if (data.type == "room.deleted"){
+                const room = data.room 
+
+
+                const existing = document.getElementById(`room-${room.id}`);
+
+                if (existing) {
+                    existing.remove();
                 }
             }
         };

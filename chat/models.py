@@ -37,6 +37,7 @@ class Room(models.Model):
 
     class Meta:
         unique_together = ['room_name' , 'room_author']
+        ordering = ['-created_at']
 
     def __str__(self) -> str:
         return self.room_name

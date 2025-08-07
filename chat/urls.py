@@ -21,4 +21,6 @@ urlpatterns = [
     path('' , rooms.RoomView.as_view() , name="index"),
     path('room/<int:room_id>' , rooms.RoomDetailView.as_view() , name="room-detail"),
     path('add-room/', rooms.RoomCreateView.as_view() , name='add_room'),
+    path('edit-room/<int:room_id>', rooms.RoomUpdateView.as_view() , name='edit_room'),
+    path('remove-room/<int:room_id>', rooms.RoomDeleteView.as_view() , name='remove_room'),
 ]

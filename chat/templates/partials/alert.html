@@ -1,7 +1,7 @@
 {% if messages %}
   <div class="fixed top-4 right-4 w-[300px] space-y-2 z-50">
     {% for message in messages %}
-      <div class="alert shadow-lg
+      <div class="alert shadow-lg alert-soft
         {% if 'success' in message.tags %} alert-success
         {% elif 'error' in message.tags %} alert-error
         {% elif 'warning' in message.tags %} alert-warning

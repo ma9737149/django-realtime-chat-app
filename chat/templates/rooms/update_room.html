@@ -1,0 +1,32 @@
+{% extends "base.html" %}
+{% load widget_tweaks %}
+
+{% block title %}
+    Update Room | {{ app_name }}
+{% endblock %}
+
+{% block content %}
+<div class="max-w-xl mx-auto mt-10">
+    <div class="card bg-base-100 shadow-lg">
+        <div class="card-body">
+            <h2 class="card-title text-2xl font-bold mb-4">Update Room</h2>
+            <form method="post">
+                {% csrf_token %}
+                {% for field in form %}
+                    <div class="mb-4">
+                        <label class="label font-semibold">{{ field.label }}</label>
+                        {{ field|add_class:"input input-bordered w-full" }}
+                        {% if field.errors %}
+                            <p class="text-error text-sm mt-1">{{ field.errors.0 }}</p>
+                        {% endif %}
+                    </div>
+                {% endfor %}
+
+                <div class="mt-6 flex justify-end">
+                    <button type="submit" class="btn btn-primary">Update Room</button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+{% endblock %}
