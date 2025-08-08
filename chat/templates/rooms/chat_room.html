@@ -9,7 +9,7 @@
     <div class="flex items-center justify-between">
       <div class="flex-1 min-w-0">
         <h2 class="text-xl font-bold truncate text-primary">{{ room.room_name }}</h2>
-        <p class="text-sm truncate text-secondary">{{ room.room_description }}</p>
+        <p class="text-sm truncate text-primary">{{ room.room_description }}</p>
       </div>
     </div>
   </div>
@@ -27,7 +27,7 @@
           
           <div class="flex-1 max-w-[80%] relative">
             <div class="flex items-center mb-1">
-              <span class="font-bold {% if msg.message_author == current_user %}text-primary{% else %}text-secondary{% endif %}">
+              <span class="font-bold {% if msg.message_author == current_user %}text-primary{% else %}text-white{% endif %}">
                 {{ msg.message_author.username }}
               </span>
               <time class="text-xs opacity-70 ml-2">{{ msg.created_at|date:"H:i" }}</time>
@@ -35,7 +35,7 @@
             
             {% if msg.reply_to %}
               <a href="#msg-{{ msg.reply_to.id }}" onclick="highlightMessage('msg-{{ msg.reply_to.id }}')" 
-                 class="text-xs border-l-4 border-accent pl-2 mb-1 bg-neutral text-accent-content flex items-center">
+                 class="text-xs border-l-4 border-accent pl-2 mb-1 bg-neutral text-white flex items-center">
                 <svg xmlns="http://www.w3.org/2000/svg" class="h-3 w-3 mr-1" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                   <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 10h11M3 6h7m1 12l4-4-4-4" />
                 </svg>
@@ -45,7 +45,7 @@
             {% endif %}
             
             <div class="relative">
-              <div class="chat-bubble {% if msg.message_author == current_user %}chat-bubble-primary{% else %}chat-bubble-secondary{% endif %}">
+              <div class="chat-bubble {% if msg.message_author == current_user %}chat-bubble-primary{% else %}chat-bubble-natural{% endif %}">
                 {{ msg.message_content }}
               </div>
               
