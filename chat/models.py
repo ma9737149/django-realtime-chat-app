@@ -43,12 +43,32 @@ class Room(models.Model):
         return self.room_name
 
 
+from django.core.exceptions import ValidationError
+
 class Message(models.Model):
     message_content = models.CharField(max_length=4000)
-    message_author = models.ForeignKey(UserProfile , on_delete=models.CASCADE , related_name = "messages")
+    message_author = models.ForeignKey(UserProfile, on_delete=models.CASCADE, related_name="messages")
     created_at = models.DateTimeField(auto_now_add=True)
     room = models.ForeignKey(Room, on_delete=models.CASCADE, related_name="messages")
 
+    reply_to = models.ForeignKey(
+        'self',
+        on_delete=models.SET_NULL,
+        null=True,
+        blank=True,
+        related_name='replies',
+        help_text='Reply to another message'
+    )
 
-    def __str__(self) -> str:
+    def clean(self):
+        if self.reply_to and self.reply_to == self:
+            raise ValidationError("A message cannot reply to itself.")
+
+    def save(self, *args, **kwargs):
+        self.full_clean()  
+        super().save(*args, **kwargs)
+
+    def __str__(self):
         return self.message_content
+
+

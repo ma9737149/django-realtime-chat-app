@@ -1,11 +1,11 @@
-from ..models import Room 
+from ..models import Room , Message
 from django.contrib.auth.mixins import LoginRequiredMixin
 from django.views.generic import DetailView , ListView  , CreateView , UpdateView , DeleteView
 from channels.layers import get_channel_layer
 from asgiref.sync import async_to_sync
 from django.urls import reverse_lazy 
 from django.contrib import messages
-from django.shortcuts import redirect
+from django.shortcuts import redirect  , get_object_or_404
 
 
 class RoomDetailView(LoginRequiredMixin , DetailView):
@@ -120,3 +120,18 @@ class RoomDeleteView(LoginRequiredMixin, DeleteView):
         )
 
         return response
+
+
+class ChatDetailView(LoginRequiredMixin, DetailView):
+    model = Room
+    template_name = 'rooms/chat_room.html'
+    pk_url_kwarg = 'room_id'
+    context_object_name = 'room'
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        room = self.object
+        chat_msgs = Message.objects.filter(room=room).select_related('message_author', 'reply_to').order_by('created_at')
+        context['chat_msgs'] = chat_msgs
+        context['current_user'] = self.request.user
+        return context
