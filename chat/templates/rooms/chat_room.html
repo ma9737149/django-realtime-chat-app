@@ -149,7 +149,6 @@
   
     room_socket.onmessage = function(e) {
       const data = JSON.parse(e.data);
-      console.log("Room socket message:", data);
   
       if (data.type === "room.updated" && data.room.id === current_room_id) {
         handleRoomUpdate(data);
@@ -176,7 +175,6 @@
   
     chat_socket.onmessage = function(e) {
       const data = JSON.parse(e.data);
-      console.log("Chat socket message:", data);
   
       if (data.type === "initial_data") {
         handleInitialData(data);
