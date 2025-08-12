@@ -30,7 +30,6 @@
                         <a href="{% url 'room-detail' room.id %}" class="btn btn-sm btn-primary btn-soft">Show More</a>
                         <a href="{% url 'chat_room' room.id %}" class="btn btn-sm btn-secondary btn-soft">Join</a>
                         {% endif %}
-                        
                     </div>
                 </div>
             </div>
@@ -47,6 +46,12 @@
         const ws_scheme = window.location.protocol === "https:" ? "wss" : "ws";
         const socket = new WebSocket(ws_scheme + "://" + window.location.host + "/ws/rooms/");
 
+        const isAuthenticated = {{ request.user.is_authenticated|yesno:"true,false" }};
+        const currentUserId = {{ request.user.id|default:"null" }};
+
+        console.log(isAuthenticated , currentUserId)
+
+
         socket.onmessage = function (e) {
             const data = JSON.parse(e.data);
 
@@ -54,6 +59,9 @@
 
             if (data.type === "room.created") {
                 const room = data.room;
+
+                console.log(room.room_author_id)
+                console.log(room)
 
                 if (!document.getElementById(`room-${room.id}`)) {
                     const div = document.createElement("div");
@@ -65,18 +73,18 @@
             
                     const title = document.createElement("h2");
                     title.className = "card-title text-primary";
-                    title.textContent = room.room_name;  
+                    title.textContent = room.room_name;
             
                     const description = document.createElement("p");
                     description.className = "description text-sm text-base-content/80 truncate";
-                    description.textContent = room.room_description;  
+                    description.textContent = room.room_description;
             
                     const infoContainer = document.createElement("div");
                     infoContainer.className = "mt-2 flex flex-col gap-1";
             
                     const authorSpan = document.createElement("span");
                     authorSpan.className = "text-sm text-base-content/60";
-                    authorSpan.innerHTML = `<span class="font-semibold">Author:</span> `; 
+                    authorSpan.innerHTML = `<span class="font-semibold">Author:</span> `;
                     authorSpan.appendChild(document.createTextNode(room.room_author));
             
                     const createdSpan = document.createElement("span");
@@ -90,18 +98,33 @@
                     const actionsDiv = document.createElement("div");
                     actionsDiv.className = "card-actions justify-end mt-4";
             
-                    const editLink = document.createElement("a");
-                    editLink.className = "btn btn-sm btn-soft btn-accent";
-                    editLink.href = `/edit-room/${room.id}`;
-                    editLink.textContent = "Edit";
+                    if (isAuthenticated && room.room_author_id === currentUserId) {
+                        const removeLink = document.createElement("a");
+                        removeLink.className = "btn btn-sm btn-soft btn-error";
+                        removeLink.href = `/remove-room/${room.id}`;
+                        removeLink.textContent = "Remove";
+                        actionsDiv.appendChild(removeLink);
+                
+                        const editLink = document.createElement("a");
+                        editLink.className = "btn btn-sm btn-soft btn-accent";
+                        editLink.href = `/edit-room/${room.id}`;
+                        editLink.textContent = "Edit";
+                        actionsDiv.appendChild(editLink);
+                    }
             
-                    const showMoreLink = document.createElement("a");
-                    showMoreLink.className = "btn btn-sm btn-primary btn-soft";
-                    showMoreLink.href = `/rooms/${room.id}/`;
-                    showMoreLink.textContent = "Show More";
-            
-                    actionsDiv.appendChild(editLink);
-                    actionsDiv.appendChild(showMoreLink);
+                    if (isAuthenticated) {
+                        const showMoreLink = document.createElement("a");
+                        showMoreLink.className = "btn btn-sm btn-primary btn-soft";
+                        showMoreLink.href = `/rooms/${room.id}/`;
+                        showMoreLink.textContent = "Show More";
+                        actionsDiv.appendChild(showMoreLink);
+                
+                        const joinLink = document.createElement("a");
+                        joinLink.className = "btn btn-sm btn-secondary btn-soft";
+                        joinLink.href = `/chat-room/${room.id}`;
+                        joinLink.textContent = "Join";
+                        actionsDiv.appendChild(joinLink);
+                    }
             
                     cardBody.appendChild(title);
                     cardBody.appendChild(description);

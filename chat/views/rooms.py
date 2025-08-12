@@ -37,6 +37,7 @@ class RoomCreateView(LoginRequiredMixin , CreateView):
             "room_description": self.object.room_description,
             "room_author": self.object.room_author.username,
             "created_at": self.object.created_at.strftime("%Y-%m-%d %H:%M"),
+            "room_author_id": self.object.room_author.id,
         }
         async_to_sync(channel_layer.group_send)(
             "rooms",
