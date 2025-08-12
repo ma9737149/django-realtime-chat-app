@@ -3,8 +3,12 @@ import json
 
 class RoomConsumer(AsyncWebsocketConsumer):
     async def connect(self):
-        await self.channel_layer.group_add("rooms", self.channel_name)
-        await self.accept()
+        user = self.scope["user"]
+        if user.is_anonymous:
+            await self.close()
+        else:
+            await self.channel_layer.group_add("rooms", self.channel_name)
+            await self.accept()
 
     async def disconnect(self, close_code):
         await self.channel_layer.group_discard("rooms", self.channel_name)

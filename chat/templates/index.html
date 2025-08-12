@@ -59,27 +59,58 @@
                     const div = document.createElement("div");
                     div.id = `room-${room.id}`;
                     div.className = "card bg-base-100 shadow-md border border-base-200";
-
-                    div.innerHTML = `
-                        <div class="card-body">
-                            <h2 class="card-title text-primary">${room.room_name}</h2>
-                            <p class="description text-sm text-base-content/80 truncate">${room.room_description}</p>
-                            <div class="mt-2 flex flex-col gap-1">
-                                <span class="text-sm text-base-content/60">
-                                    <span class="font-semibold">Author:</span> ${room.room_author}
-                                </span>
-                                <span class="text-sm text-base-content/60">
-                                    <span class="font-semibold">Created:</span> ${room.created_at}
-                                </span>
-                            </div>
-                            <div class="card-actions justify-end mt-4">
-                                <a href="/edit-room/${room.id}" class="btn btn-sm btn-soft btn-accent">Edit</a>
-                                <a href="/rooms/${room.id}/" class="btn btn-sm btn-primary btn-soft">Show More</a>
-                            </div>
-                        </div>
-                    `;
-
-                    roomsList.prepend(div); 
+            
+                    const cardBody = document.createElement("div");
+                    cardBody.className = "card-body";
+            
+                    const title = document.createElement("h2");
+                    title.className = "card-title text-primary";
+                    title.textContent = room.room_name;  
+            
+                    const description = document.createElement("p");
+                    description.className = "description text-sm text-base-content/80 truncate";
+                    description.textContent = room.room_description;  
+            
+                    const infoContainer = document.createElement("div");
+                    infoContainer.className = "mt-2 flex flex-col gap-1";
+            
+                    const authorSpan = document.createElement("span");
+                    authorSpan.className = "text-sm text-base-content/60";
+                    authorSpan.innerHTML = `<span class="font-semibold">Author:</span> `; 
+                    authorSpan.appendChild(document.createTextNode(room.room_author));
+            
+                    const createdSpan = document.createElement("span");
+                    createdSpan.className = "text-sm text-base-content/60";
+                    createdSpan.innerHTML = `<span class="font-semibold">Created:</span> `;
+                    createdSpan.appendChild(document.createTextNode(room.created_at));
+            
+                    infoContainer.appendChild(authorSpan);
+                    infoContainer.appendChild(createdSpan);
+            
+                    const actionsDiv = document.createElement("div");
+                    actionsDiv.className = "card-actions justify-end mt-4";
+            
+                    const editLink = document.createElement("a");
+                    editLink.className = "btn btn-sm btn-soft btn-accent";
+                    editLink.href = `/edit-room/${room.id}`;
+                    editLink.textContent = "Edit";
+            
+                    const showMoreLink = document.createElement("a");
+                    showMoreLink.className = "btn btn-sm btn-primary btn-soft";
+                    showMoreLink.href = `/rooms/${room.id}/`;
+                    showMoreLink.textContent = "Show More";
+            
+                    actionsDiv.appendChild(editLink);
+                    actionsDiv.appendChild(showMoreLink);
+            
+                    cardBody.appendChild(title);
+                    cardBody.appendChild(description);
+                    cardBody.appendChild(infoContainer);
+                    cardBody.appendChild(actionsDiv);
+            
+                    div.appendChild(cardBody);
+            
+                    roomsList.prepend(div);
                 }
             }
             else if (data.type === "room.updated"){
@@ -89,8 +120,8 @@
                 const room_description_div = document.querySelector(`#room-${room.id} .card-body .description`)
 
 
-                room_name_div.innerHTML = room.room_name
-                room_description_div.innerHTML = room.room_description
+                room_name_div.textContent = room.room_name
+                room_description_div.textContent = room.room_description
             }
             else if (data.type == "room.deleted"){
                 const room = data.room 
