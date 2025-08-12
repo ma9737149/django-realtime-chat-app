@@ -7,8 +7,8 @@
   <div class="p-4 border-b border-primary bg-neutral sticky top-0 z-10">
     <div class="flex items-center justify-between">
       <div class="flex-1 min-w-0">
-        <h2 class="text-xl font-bold truncate text-primary">{{ room.room_name }}</h2>
-        <p class="text-sm truncate text-primary">{{ room.room_description }}</p>
+        <h2 class="text-xl font-bold truncate text-primary room-name">{{ room.room_name }}</h2>
+        <p class="text-sm truncate text-primary room-description">{{ room.room_description }}</p>
       </div>
     </div>
   </div>
@@ -105,6 +105,34 @@
   </div>
 
   <script>
+
+    const ws_scheme = window.location.protocol === "https:" ? "wss" : "ws";
+    const socket = new WebSocket(ws_scheme + "://" + window.location.host + "/ws/rooms/");
+    const current_room_id = {{ room.id }}
+
+
+    socket.onmessage = function (e) {
+        const data = JSON.parse(e.data);
+
+        if (data.type === "room.updated" && data.room.id === current_room_id){
+          const room = data.room;
+          const name = document.querySelector('.room-name')
+          const description = document.querySelector('.room-description')
+          
+          name.textContent = room.room_name
+          description.textContent = room.room_description
+
+          document.title =  `${room.room_name}  | ChatApp`
+        }
+
+        else if (data.type == "room.deleted" && data.room.id === current_room_id){
+          alert(`This room has been deleted.`);
+          window.location.href = "/";
+        }
+    }
+
+
+
     function scrollToBottom() {
       const anchor = document.getElementById('scroll-anchor');
       anchor.scrollIntoView({ behavior: 'instant' });

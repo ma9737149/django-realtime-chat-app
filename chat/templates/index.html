@@ -49,7 +49,6 @@
         const isAuthenticated = {{ request.user.is_authenticated|yesno:"true,false" }};
         const currentUserId = {{ request.user.id|default:"null" }};
 
-        console.log(isAuthenticated , currentUserId)
 
 
         socket.onmessage = function (e) {
