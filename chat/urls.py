@@ -25,7 +25,6 @@ urlpatterns = [
     path('remove-room/<int:room_id>', rooms.RoomDeleteView.as_view() , name='remove_room'),
 
 
-    # this for test purposes
     path('chat_room/<int:room_id>', rooms.ChatDetailView.as_view(), name='chat_room'),
 
 ]
