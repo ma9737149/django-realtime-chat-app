@@ -60,8 +60,7 @@
             if (data.type === "room.created") {
                 const room = data.room;
 
-                console.log(room.room_author_id)
-                console.log(room)
+
 
                 if (!document.getElementById(`room-${room.id}`)) {
                     const div = document.createElement("div");
