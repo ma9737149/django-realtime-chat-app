@@ -160,14 +160,9 @@
   
     room_socket.onclose = function(e) {
       console.log("Room socket closed:", e);
-      if (e.code === 4001) {
-        showError("You must be logged in to access rooms");
-      }
     };
   
-    room_socket.onerror = function(e) {
-      console.error("Room socket error:", e);
-    };
+
   
     chat_socket.onopen = function(e) {
       console.log("Chat socket connected for room:", current_room_id);
@@ -185,28 +180,19 @@
       else if (data.type === "chat_message") {
         handleChatMessage(data);
       }
-      else if (data.type === "error") {
-        showError(data.message);
-      }
     };
   
     chat_socket.onclose = function(e) {
       console.log("Chat socket closed:", e);
-      if (e.code === 4001) {
-        showError("You must be logged in to chat");
-      } else if (e.code === 4002) {
-        showError("Chat connection error. Please try again.");
-      }
+
     };
   
     chat_socket.onerror = function(e) {
       console.error("Chat socket error:", e);
-      showError("Chat connection error. Please refresh the page.");
     };
   
     function handleInitialData(data) {
       updateActiveUsers(data.active_users);
-      showSystemMessage(data.message);
     }
   
     function handleUserActivity(data) {
