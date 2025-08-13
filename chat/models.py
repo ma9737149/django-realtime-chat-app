@@ -43,8 +43,6 @@ class Room(models.Model):
         return self.room_name
 
 
-from django.core.exceptions import ValidationError
-
 class Message(models.Model):
     message_content = models.CharField(max_length=4000)
     message_author = models.ForeignKey(UserProfile, on_delete=models.CASCADE, related_name="messages")
